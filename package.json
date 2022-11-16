@@ -1,46 +1,23 @@
 {
-	"name": "com.adrenak.univoice",
-	"version": "1.2.0",
-	"displayName": "Adrenak.UniVoice",
-	"description": "Voice chat/VoIP solution for Unity.",
-	"unity": "2018.4",
-	"author": {
-		"name": "Vatsal Ambastha",
-		"email": "ambastha.vatsal@gmail.com",
-		"url": "http://www.vatsalambastha.com"
-	},
-	"license":"MIT",
-	"keywords": [
-		"Peer To Peer",
-		"WebRTC",
-		"P2P",
-		"Networking",
-		"Voice Chat",
-		"voip"
-	],
-	"samples": [
-        {
-            "displayName": "All samples",
-            "description": "Includes a group void chat sample.",
-            "path": "Samples~/"
-        }
-    ],
-	"dependencies": {
-		"com.adrenak.unimic":"1.0.3",
-		"com.adrenak.airpeer":"1.2.0"
-	},
-	"scopedRegistries": [
-		{
-		  	"name": "registry.npmjs.org",
-		  	"url": "https://registry.npmjs.org",
-		  	"scopes": [
-				  "com.adrenak.unimic",
-				  "com.adrenak.airpeer",
-				"org.npmjs"
-		  	]
-		}
-	],
-	"publishConfig": {
-		"registry": "https://registry.npmjs.org"
-	}
+  "name": "websocket-signaling",
+  "version": "0.97.4",
+  "description": "A websocket signaling server for use with WebRTC Network and Video Chat assets for Unity.",
+  "main": "server.js",
+  "author": {
+    "name": "Christoph Kutza",
+    "email": "contact@because-why-not.com"
+  },
+  "dependencies": {
+    "express": "^4.13.4",
+    "requirejs": "^2.2.0",
+    "typescript": "1.8.9",
+    "ws": "^1.1.0"
+  }, 
+  "devDependencies": {
+    "pkg": "5.5.1"
+  },
+  "scripts": {
+    "tsc": "tsc",
+    "package-win": "pkg -t node16-win ./server.js -o ./VioceBackend.exe"
+  }
 }
