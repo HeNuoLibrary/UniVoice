@@ -1,93 +1,87 @@
-# AirPeer
-A WebRTC based networking plugin for Unity3D.
+![Cover](https://github.com/adrenak/UniMic/blob/master/cover.jpg)
+## UniMic
+A wrapper for Unity's Microphone class.
 
-AirPeer allows Unity applications to communicate in a peer to peer manner using [WebRTC technology](https://webrtc.org/).
+## API
+`Mic` class in the `Adrenak.UniMic` namespace is a singleton and is accessed using `Mic.Instance`
 
-Built on top of [Christoph Kutza's](https://www.because-why-not.com/) WebRTC Network project with added features such as
-- Differentiating peers into server and clients to form star networks with server at the center.
-- For client to client communication (via server).
-- Event based API.
-- Message (de)serialization features.
-  
-## Installation
-AirPeer is distributed as a UPM package. There are many ways to install AirPeer. Here are 5 of them:
-<details>  
-<summary>Click to see more.</summary>  
-<br>
+### Properties
+- `IsRecording` 
+Returns if the Mic instance is recording audio
 
-1. Packages>manifest.json file  
-  * Easiest method for most people.  
-  * Ensure you have NPMJS registry in manifest.json inside the `"scopedRegistries"` object and under the scopes `com.adrenak.airpeer` is added. Then add the package as a project dependency. Make sure `"dependencies"` array has this the package name. If done right your manifest.json should resemble this. Substitute `x.x.x` with the version of AirPeer that you want in your project :
-```
-        {
-            "dependencies": {
-                "com.adrenak.airpeer": "x.x.x"
-                <<other dependencies of your project>>
-            },
-            "scopedRegistries": [
-                {
-                    "name": "npmjs",
-                    "url": "https://registry.npmjs.com",
-                    "scopes": [
-                        "com.adrenak.airpeer",
-                        <<other packages from npmjs registry>>
-                    ]
-                },
-                <<Other scoped registries, if any>>
-            ]
-        }
-```
-  
-2. Git clone method. Clone this repository. Then do either of these
-    * Copy Assets/Adrenak.AirPeer into your projects Assets or Packages folder 
-    * Checkout the upm branch in the cloned repository using `git checkout upm`. Go to Unity>Window>Package Manager. Click on the + button in the top left corner>Add package from disk... and select Assets/Adrenak.AirPeer/package.json inside the cloned repository.  
+- `Frequency`
+The frequency of the Microphone AudioClip
 
-      This approach also allows you to change the version of AirPeer by doing a `git checkout` inside the cloned repository to a specific version and also lets you fetch the latest updates using `git pull origin upm`. 
-    
-      If  you know basic git and don't know much about upm, this is a good approach.
+- `Sample`
+The last populated sample of the audio data
 
-3. OpenUPM:  
-    * AirPeer is available on [NPM](https://npmjs.com/package/com.adrenak.airpeer) and [OpenUPM](https://openupm.com/packages/com.adrenak.airpeer.html) registries. If you're using the OpenUPM CLI type any of these in the terminal:  
-      * `openupm add com.adrenak.airpeer` which will install it using the OpenUPM registry  
-      * `openupm add --registry https://registry.npmjs.com com.adrenak.airpeer` which will install it using the NPM registry.  
+- `SampleDurationMS`
+The duration of the sample segment in milliseconds that the instance maintains and fires in events. 
 
-      If you know UPM and use OpenUPM CLI, this method is the best.
+- `SampleLen`
+The number of samples in the sample segment
 
-4. Via Git URL in Unity Package Manager:  
-    * Press the + button in package manager and add the URL https://github.com/adrenak/airpeer.git#upm.
+- `Clip`
+The inner `AudioClip` of the instance
 
-5. Github releases:
-    * Go to https://github.com/adrenak/airpeer/tags and click on any `upm/x.x.x` where `x.x.x` is the version of AirPeer. You can download the zip and extract inside your projects Packages folder.
+- `Devices`
+The recording devices that are connected to the machine running the code
 
-</details>  
-  
+- `CurrentDeviceIndex`
+The index of the active device in the `Devices` list
 
-## Documentation
-Manual and tutorials is WIP. In the meantime, please refer to codedoc generated documentation [here](http://www.vatsalambastha.com/airpeer).
-  
-## Samples
-AirPeers comes with a couple of handy samples that show how you can connect to a WebRTC network and exchange messages. To import samples, go to Window>Package Manager. Find `Adrenak.AirPeer` and install Samples from the options on the right hand side of the window.
-  
-## Signalling Server
-A Signalling server implementation can be found in the [AirSignal](https://github.com/adrenak/airsignal) repository.
-  
-The samples in the AirPeer repository use an IP:Port that I am hosting, but it is neither garunteed to be online nor secure. 
-  
-It is HIGHLY advised that you run AirSignal (or your own WebRTC signalling server implementation) on your own server and don't rely on my server. AirSignal can also be run locally localhost for easier testing.
-  
-## Editor testing
-Use [ParellSync](https://github.com/VeriorPies/ParrelSync) to use the samples within the Unity editor. 
-  
-## Connectivity issues
-A major issue right now is that often two peers fail to connect. The problem is supposedly because of NAT failure.
+- `CurrentDeviceName`
+The name of the active device
 
-The plugins on which AirPeer operates are old and their source code is not open for editir. Refactoring AirPeer to make APNetwork an abstraction is planned. 
 
-This would then be used to make [Unity's WebRTC](https://github.com/Unity-Technologies/com.unity.webrtc), which is more robust, the underlying networking plugin. An abstract APNetwork would also mean that APNode can use different WebRTC implementations, such as the [MixedReality-WebRTC](https://github.com/microsoft/MixedReality-WebRTC) or custom ones.
-  
+### Events
+- `OnStartRecording`
+Event fired when the instance starts to record the audio
+
+- `OnStopRecording`
+Event fired when the instance stops recording the audio
+
+- `OnSampleReady`
+Event fired when a sample of `SampleLen` has been populated by the instance
+
+### Methods
+- `ChangeDevice` changes the recording device. The method internally restarts the recording process
+    - `Arguments`
+        - `int index` the index of the device in the `Devices` list
+    - `Returns`
+        - `void`
+
+
+- `StartRecording` starts the microphone recording
+    - `Arguments`
+        - `int frequency=16000` the frequency of the inner `AudioClip`
+        - `int sampleLen` the length of a single sample segment that the instance keeps and fires on event
+    - `Returns`
+        - `void`
+
+- `StopRecording` stops the microphone recording
+    - `Returns`
+        - `void`
+
+- `GetSpectrumData` provides a block of the microphone input spectrum data.
+    - `Arguments`
+        - `FFTWindow fftWindow` the Fast Fourier Transform window to be used. [Info](https://docs.unity3d.com/ScriptReference/FFTWindow.html)
+        - `int sampleCount` the sample count for the internal `AudioSource.GetSpectrumData` call
+    - `Returns`
+        - `float[]` the spectrum data
+
+- `GetOutputData` provides a block of the microphone input output data.
+    - `Arguments`
+        - `int sampleCount` the sample count for the internal `AudioSource.GetOutputData` call
+    - `Returns`
+        - `float[]` the output data
+
+## Tips
+Just open the Unity project in Unity5+ and try the demo scene.  
+
+## Soon  
+Ready to use spectrum methods such as for standard octaves
+
 ## Contact
-This repository is made by Vatsal Ambastha and is under the MIT license.  
-  
-Feel free to get in touch for helping support this project. As well as for commercial consultation/development in your own projects.
-
-[@github](https://www.github.com/adrenak)  [@website](http://www.vatsalambastha.com)  [@twitter](https://www.twitter.com/vatsalambastha)  
+[@github](https://www.github.com/adrenak)  
+[@www](http://www.vatsalambastha.com)
